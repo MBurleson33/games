@@ -9,42 +9,86 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-/* VOICE: a printed dinner menu at a warm Thanksgiving table.
-   IDEA: the evening's menu card, listing the two games as courses.
-   PICTURE: two place cards, each with its own line-drawn mark and a thin gold rule.
+/* VOICE: a printed menu card at a warm get-together.
+   IDEA: the evening's menu card: choose a course, and its card is set before you.
+   PICTURE: the chosen game's place card, a colour band with its line-drawn mark over a cream card with a thin gold rule.
    COLOUR and TYPE: cream linen, forest green, cranberry, soft gold; Fraunces + Figtree.
-   LAYOUT: one centred column, masthead, two game cards, a quiet share button. */
+   LAYOUT: one centred column: masthead, a custom dropdown, the selected game's card with a big Play button. */
 :root{--linen:#f5eee2;--card:#fffcf7;--ink:#2b2420;--muted:#7a6b5d;--line:rgba(43,36,32,.13);
-  --cran:#8e2638;--forest:#2f4a3a;--forest-2:#3b5c49;--gold:#b08a3e;--gold-soft:#e6d6b0;--gold-pale:#f6eedb;
+  --cran:#8e2638;--forest:#2f4a3a;--gold:#b08a3e;--gold-deep:#97742f;--gold-soft:#e6d6b0;--gold-pale:#f6eedb;
   --serif:"Fraunces",Georgia,serif;--sans:"Figtree",system-ui,sans-serif;
-  --shadow:0 1px 1px rgba(60,40,20,.06),0 18px 36px -22px rgba(60,40,20,.5)}
+  --shadow:0 1px 1px rgba(60,40,20,.06),0 18px 36px -22px rgba(60,40,20,.5);--accent:var(--forest)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;min-width:0}
 html,body{margin:0}
 body{min-height:100vh;color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;background-color:var(--linen);
   background-image:repeating-linear-gradient(0deg,rgba(120,90,50,.018) 0 1px,transparent 1px 3px),repeating-linear-gradient(90deg,rgba(120,90,50,.014) 0 1px,transparent 1px 5px),radial-gradient(120% 60% at 50% 0%,#fbf6ec 0%,transparent 70%);
-  padding:calc(env(safe-area-inset-top) + 34px) 20px calc(env(safe-area-inset-bottom) + 34px)}
+  padding:calc(env(safe-area-inset-top) + 34px) 20px calc(env(safe-area-inset-bottom) + 40px)}
 .wrap{max-width:460px;margin:0 auto}
 :focus-visible{outline:2px solid var(--forest);outline-offset:3px}
+.hidden{display:none!important}
+
+/* masthead */
 .mast{text-align:center;margin-bottom:26px}
-.mast svg{width:54px;height:54px;display:block;margin:0 auto 6px}
+.mast .wheat{width:54px;height:54px;display:block;margin:0 auto 6px}
 h1{margin:0;font-family:var(--serif);font-weight:600;font-variation-settings:"opsz" 144;font-size:clamp(42px,12vw,56px);line-height:1;letter-spacing:-.015em}
 .hello{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-style:italic;font-size:20px;color:var(--cran);margin:10px 0 6px}
 .hello::before,.hello::after{content:"";height:1px;flex:1;background:linear-gradient(90deg,transparent,var(--gold) 30%,var(--gold) 70%,transparent)}
 .sub{color:var(--muted);margin:0}
-.game{position:relative;display:flex;gap:14px;align-items:flex-start;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:22px 20px;margin-bottom:16px;transition:transform .12s,box-shadow .2s}
-.game::after{content:"";position:absolute;inset:6px;border:1px solid var(--gold-soft);border-radius:11px;pointer-events:none}
-.game:active{transform:translateY(1px)}
-.mark{flex:none;width:56px;height:56px;margin-top:2px;border-radius:50%;display:grid;place-items:center}
-.cham .mark{background:var(--forest)}.thank .mark{background:var(--cran)}.gobble .mark{background:var(--gold)}
-.mark svg{width:40px;height:40px}
-.txt{flex:1}
-.txt h2{margin:0;font-family:var(--serif);font-weight:600;font-size:25px;line-height:1.1}
-.txt p{margin:6px 0 10px;color:var(--muted);font-size:15px}
-.meta{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:14px;color:var(--muted)}
-.play{flex:none;font-weight:600;color:#fbf6ec;border-radius:999px;padding:6px 14px;font-size:14px}
-.cham .play{background:var(--forest)}.thank .play{background:var(--cran)}.gobble .play{background:var(--gold)}
+
+/* dropdown */
+.lbl{display:block;font-family:var(--serif);font-style:italic;color:var(--muted);font-size:16px;margin:0 0 8px 2px}
+.dd{position:relative;margin-bottom:20px;z-index:5}
+.ddBtn{display:flex;align-items:center;gap:12px;width:100%;background:var(--card);border:1px solid rgba(43,36,32,.2);border-radius:14px;padding:12px 14px;font:inherit;color:inherit;text-align:left;cursor:pointer;box-shadow:var(--shadow);transition:border-color .15s,box-shadow .15s}
+.ddBtn:hover{border-color:rgba(43,36,32,.35)}
+.dd.open .ddBtn{border-color:var(--forest);box-shadow:0 0 0 3px rgba(47,74,58,.14),var(--shadow)}
+.ddBtn .dot{width:40px;height:40px;flex:none;border-radius:50%;display:grid;place-items:center;background:var(--gold-pale);border:1px dashed var(--gold)}
+.ddBtn .dot svg{width:28px;height:28px}
+.ddBtn .t{flex:1}
+.ddBtn .t b{display:block;font-family:var(--serif);font-weight:600;font-size:20px;line-height:1.15}
+.ddBtn .t span{font-size:14px;color:var(--muted)}
+.ddBtn .chev{flex:none;width:18px;height:18px;transition:transform .2s}
+.dd.open .chev{transform:rotate(180deg)}
+.ddList{position:absolute;left:0;right:0;top:calc(100% + 8px);margin:0;padding:6px;list-style:none;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 24px 50px -20px rgba(60,40,20,.5);display:none;animation:drop .16s ease-out}
+.dd.open .ddList{display:block}
+@keyframes drop{from{opacity:0;transform:translateY(-6px)}}
+.opt{display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;cursor:pointer}
+.opt[aria-selected="true"]{background:var(--gold-pale)}
+.opt.act{background:rgba(47,74,58,.08)}
+.opt .dot{width:40px;height:40px;flex:none;border-radius:50%;display:grid;place-items:center}
+.opt .dot svg{width:28px;height:28px}
+.opt b{display:block;font-family:var(--serif);font-weight:600;font-size:18px;line-height:1.2}
+.opt .tx>span{display:block;font-size:14px;color:var(--muted)}
+.opt .ck{margin-left:auto;color:var(--forest);font-weight:600;opacity:0}
+.opt[aria-selected="true"] .ck{opacity:1}
+
+/* empty state */
+.empty{text-align:center;color:var(--muted);font-family:var(--serif);font-style:italic;padding:28px 10px;border:1px dashed var(--gold-soft);border-radius:16px}
+
+/* feature card */
+.feat{position:relative;background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;animation:rise .35s cubic-bezier(.2,.7,.3,1)}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}}
+.band{position:relative;background:var(--accent);color:#fbf6ec;padding:26px 22px 22px;text-align:center}
+.band::after{content:"";position:absolute;inset:7px;border:1px solid rgba(230,214,176,.45);border-radius:12px;pointer-events:none}
+.band .art{width:92px;height:92px;margin:0 auto 8px;border-radius:50%;display:grid;place-items:center;background:rgba(251,246,236,.1);border:1px solid rgba(230,214,176,.4)}
+.band .art svg{width:66px;height:66px}
+.band h2{margin:0;font-family:var(--serif);font-weight:600;font-size:clamp(28px,8vw,36px);line-height:1.05;text-wrap:balance}
+.band p{margin:8px auto 0;font-family:var(--serif);font-style:italic;color:var(--gold-soft);font-size:17px;max-width:30ch}
+.body{position:relative;padding:20px 22px 22px}
+.body::after{content:"";position:absolute;left:7px;right:7px;bottom:7px;top:-1px;border:1px solid var(--gold-soft);border-top:0;border-radius:0 0 12px 12px;pointer-events:none}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.chips span{background:var(--gold-pale);border:1px solid var(--gold-soft);border-radius:999px;padding:3px 11px;font-size:13px;font-weight:500}
+.body h3{margin:0 0 8px;font-family:var(--serif);font-weight:600;font-size:19px}
+.steps{margin:0 0 20px;padding:0;list-style:none;counter-reset:s}
+.steps li{position:relative;padding:0 0 10px 38px;counter-increment:s}
+.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:26px;height:26px;border-radius:50%;border:1px solid var(--gold);display:grid;place-items:center;font-family:var(--serif);font-weight:600;font-size:14px;color:var(--accent)}
+.play{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:10px;width:100%;text-decoration:none;background:var(--accent);color:#fbf6ec;border-radius:14px;padding:17px 20px;font-weight:600;font-size:19px;box-shadow:0 10px 22px -12px rgba(43,36,32,.6);transition:transform .08s,filter .15s}
+.play:hover{filter:brightness(1.08)}
+.play:active{transform:translateY(1px)}
+.play svg{width:18px;height:18px}
+.note{position:relative;z-index:1;text-align:center;font-size:14px;color:var(--muted);margin:12px 0 0}
+
+/* share */
 .share{display:block;width:100%;margin-top:22px;border:1px solid var(--line);background:transparent;border-radius:12px;padding:14px 18px;font:500 16px var(--sans);color:var(--ink);cursor:pointer}
-.foot{text-align:center;font-family:var(--serif);font-style:italic;color:var(--muted);margin-top:26px}
 .scrim{position:fixed;inset:0;z-index:10;display:none;align-items:flex-end;justify-content:center;background:rgba(43,36,32,.45);backdrop-filter:blur(2px);padding:16px 16px calc(env(safe-area-inset-bottom) + 16px)}
 .scrim.open{display:flex}
 .dialog{position:relative;width:100%;max-width:460px;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:24px 22px;text-align:center;animation:rise .25s ease-out}
@@ -58,45 +102,40 @@ h1{margin:0;font-family:var(--serif);font-weight:600;font-variation-settings:"op
 .btn{display:block;width:100%;border:1px solid transparent;border-radius:12px;padding:14px 18px;font:600 16px var(--sans);cursor:pointer;margin-top:10px}
 .btn-go{background:var(--forest);color:#fbf6ec}
 .btn-quiet{background:transparent;border-color:var(--line);color:var(--ink);font-weight:500}
-@keyframes rise{from{transform:translateY(24px);opacity:0}}
-@media (prefers-reduced-motion:reduce){.dialog{animation:none}.game{transition:none}}
+@media (prefers-reduced-motion:reduce){.feat,.dialog,.ddList{animation:none}.chev{transition:none}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header class="mast">
-    <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M44 8C36 22 26 40 18 58" fill="none" stroke="#b08a3e" stroke-width="1.6" stroke-linecap="round"/><g fill="#efe2c2" stroke="#b08a3e" stroke-width="1.3"><ellipse cx="44.5" cy="7.5" rx="2.6" ry="5.6" transform="rotate(22 44.5 7.5)"/><ellipse cx="35.3" cy="15" rx="2.6" ry="5.6" transform="rotate(-18 35.3 15)"/><ellipse cx="44.4" cy="17" rx="2.6" ry="5.6" transform="rotate(52 44.4 17)"/><ellipse cx="31.1" cy="23" rx="2.6" ry="5.6" transform="rotate(-18 31.1 23)"/><ellipse cx="40.2" cy="25" rx="2.6" ry="5.6" transform="rotate(52 40.2 25)"/><ellipse cx="27" cy="31" rx="2.6" ry="5.6" transform="rotate(-18 27 31)"/><ellipse cx="36.1" cy="33" rx="2.6" ry="5.6" transform="rotate(52 36.1 33)"/><ellipse cx="22.8" cy="39" rx="2.6" ry="5.6" transform="rotate(-18 22.8 39)"/><ellipse cx="31.9" cy="41" rx="2.6" ry="5.6" transform="rotate(52 31.9 41)"/></g><path d="M22 50c-8-1-13 3-15 8 6 1 12-1 15-8z" fill="#2f4a3a" opacity=".85"/></svg>
+    <svg class="wheat" viewBox="0 0 64 64" aria-hidden="true"><rect x="14" y="14" width="24" height="34" rx="3" transform="rotate(-12 26 31)" fill="#fffcf7" stroke="#b08a3e" stroke-width="1.4"/><rect x="26" y="12" width="24" height="34" rx="3" transform="rotate(10 38 29)" fill="#f6eedb" stroke="#b08a3e" stroke-width="1.4"/><path d="M38 24c2-3 6-2 6 1 0 3-6 7-6 7s-6-4-6-7c0-3 4-4 6-1z" transform="rotate(10 38 29)" fill="#8e2638"/><circle cx="21" cy="22" r="1.6" fill="#2f4a3a"/><circle cx="31" cy="42" r="1.6" fill="#2f4a3a"/></svg>
     <h1>Game Night</h1>
-    <div class="hello">Happy Thanksgiving!</div>
-    <p class="sub">Pick a game to play together.</p>
+    <div class="hello">Party games for any get-together</div>
+    <p class="sub">Everyone plays on their own phone.</p>
   </header>
 
-  <a class="game cham" href="https://chameleon-ten-pi.vercel.app">
-    <span class="mark" aria-hidden="true"><svg viewBox="0 0 120 84"><g stroke="#e6d6b0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M6 74 Q60 66 116 74"/><path d="M44 58 L41 71 M58 59 L60 71 M80 58 L78 70 M94 54 L97 69"/><path d="M40 56 C14 60 8 42 18 34 C28 26 40 36 32 44 C28 48 22 45 24 40"/><path d="M38 50 C40 30 64 20 86 26 C98 29 108 38 110 46 C106 54 96 57 86 57 L46 59 C40 59 37 56 38 50Z"/><path d="M60 24 L64 17 L70 22 L76 16 L80 24"/><circle cx="94" cy="40" r="7"/></g><circle cx="95.5" cy="40" r="2.8" fill="#e6d6b0"/></svg></span>
-    <span class="txt">
-      <h2>Chameleon</h2>
-      <p>Everyone gets the secret word except one person. Give one-word clues and catch the bluffer.</p>
-      <span class="meta"><span>3–20 players</span><span class="play">Play</span></span>
-    </span>
-  </a>
+  <span class="lbl" id="ddLbl">Tonight's game</span>
+  <div class="dd" id="dd">
+    <button class="ddBtn" id="ddBtn" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="ddLbl ddBtn">
+      <span class="dot" id="ddDot"></span>
+      <span class="t"><b id="ddName">Choose a game</b><span id="ddSub">Tap to see the games</span></span>
+      <svg class="chev" viewBox="0 0 18 18" aria-hidden="true"><path d="M4 7l5 5 5-5" fill="none" stroke="#2f4a3a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <ul class="ddList" id="ddList" role="listbox" aria-labelledby="ddLbl" tabindex="-1"></ul>
+  </div>
 
-  <a class="game thank" href="https://thankful-ebon.vercel.app/">
-    <span class="mark" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M44 8C36 22 26 40 18 58" fill="none" stroke="#e6d6b0" stroke-width="2" stroke-linecap="round"/><g fill="none" stroke="#e6d6b0" stroke-width="1.8"><ellipse cx="44.5" cy="7.5" rx="2.6" ry="5.6" transform="rotate(22 44.5 7.5)"/><ellipse cx="35.3" cy="15" rx="2.6" ry="5.6" transform="rotate(-18 35.3 15)"/><ellipse cx="44.4" cy="17" rx="2.6" ry="5.6" transform="rotate(52 44.4 17)"/><ellipse cx="31.1" cy="23" rx="2.6" ry="5.6" transform="rotate(-18 31.1 23)"/><ellipse cx="40.2" cy="25" rx="2.6" ry="5.6" transform="rotate(52 40.2 25)"/><ellipse cx="27" cy="31" rx="2.6" ry="5.6" transform="rotate(-18 27 31)"/><ellipse cx="36.1" cy="33" rx="2.6" ry="5.6" transform="rotate(52 36.1 33)"/></g></svg></span>
-    <span class="txt">
-      <h2>Who's Thankful For That?</h2>
-      <p>Everyone writes one thing they're thankful for, then the table guesses who wrote each answer.</p>
-      <span class="meta"><span>2+ players</span><span class="play">Play</span></span>
-    </span>
-  </a>
+  <div class="empty" id="empty">Pick a game above and its card will appear here.</div>
 
-  <a class="game gobble" href="https://thankful-ebon.vercel.app/gobble/">
-    <span class="mark" aria-hidden="true"><svg viewBox="0 0 64 64"><g stroke="#e6d6b0" stroke-width="1.3" stroke-linejoin="round"><ellipse cx="16.2" cy="35.2" rx="5" ry="11" transform="rotate(-80 16.2 35.2)" fill="none"/><ellipse cx="18.1" cy="30.0" rx="5" ry="11" transform="rotate(-60 18.1 30.0)" fill="none"/><ellipse cx="21.7" cy="25.7" rx="5" ry="11" transform="rotate(-40 21.7 25.7)" fill="none"/><ellipse cx="26.5" cy="23.0" rx="5" ry="11" transform="rotate(-20 26.5 23.0)" fill="none"/><ellipse cx="32.0" cy="22.0" rx="5" ry="11" transform="rotate(0 32.0 22.0)" fill="none"/><ellipse cx="37.5" cy="23.0" rx="5" ry="11" transform="rotate(20 37.5 23.0)" fill="none"/><ellipse cx="42.3" cy="25.7" rx="5" ry="11" transform="rotate(40 42.3 25.7)" fill="none"/><ellipse cx="45.9" cy="30.0" rx="5" ry="11" transform="rotate(60 45.9 30.0)" fill="none"/><ellipse cx="47.8" cy="35.2" rx="5" ry="11" transform="rotate(80 47.8 35.2)" fill="none"/><ellipse cx="32" cy="44" rx="11" ry="12" fill="none"/><circle cx="32" cy="30" r="6" fill="none"/></g><path d="M37 30l4 1.5-4 1.5z" fill="#e6d6b0"/><path d="M36 33c2 2 2 5 0 6-1-2-1-4 0-6z" fill="#e6d6b0"/><circle cx="34" cy="28" r="1.2" fill="#e6d6b0"/><path d="M28 55v6M36 55v6" stroke="#e6d6b0" stroke-width="1.4" stroke-linecap="round"/></svg></span>
-    <span class="txt">
-      <h2>Gobble Minds</h2>
-      <p>Two ways to play: match the table, or be the Odd Bird with an answer nobody else gives.</p>
-      <span class="meta"><span>3+ players</span><span class="play">Play</span></span>
-    </span>
-  </a>
+  <article class="feat hidden" id="feat" aria-live="polite">
+    <div class="band"><div class="art" id="fArt"></div><h2 id="fName"></h2><p id="fTag"></p></div>
+    <div class="body">
+      <div class="chips" id="fChips"></div>
+      <h3>How it plays</h3>
+      <ol class="steps" id="fSteps"></ol>
+      <a class="play" id="fPlay" href="#"><span id="fPlayName">Play</span><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M5 9h8M9.5 5.5L13 9l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <p class="note" id="fNote"></p>
+    </div>
+  </article>
 
   <button class="share" id="share" type="button">Show a QR code so others can join</button>
 </div>
@@ -116,6 +155,63 @@ h1{margin:0;font-family:var(--serif);font-weight:600;font-variation-settings:"op
 <script>
 {
 const $=id=>document.getElementById(id);
+const GAMES=[
+  {id:"chameleon",name:"Chameleon",color:"#2f4a3a",url:"https://chameleon-ten-pi.vercel.app",mark:`<svg viewBox="0 0 120 84"><g stroke="#e6d6b0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M6 74 Q60 66 116 74"/><path d="M44 58 L41 71 M58 59 L60 71 M80 58 L78 70 M94 54 L97 69"/><path d="M40 56 C14 60 8 42 18 34 C28 26 40 36 32 44 C28 48 22 45 24 40"/><path d="M38 50 C40 30 64 20 86 26 C98 29 108 38 110 46 C106 54 96 57 86 57 L46 59 C40 59 37 56 38 50Z"/><path d="M60 24 L64 17 L70 22 L76 16 L80 24"/><circle cx="94" cy="40" r="7"/></g><circle cx="95.5" cy="40" r="2.8" fill="#e6d6b0"/></svg>`,
+   tag:"Everyone knows the secret word except one bluffer.",
+   chips:["3–20 players","10–20 min","Everyone's phone"],
+   steps:["One person hosts and reads out a 4-letter code. Everyone joins with it.","Press and hold your card to see the secret word. The chameleon only sees the category.","Go around the circle giving one-word clues, then point at who you think is bluffing."],
+   note:"Works offline too, if the signal is bad."},
+  {id:"thankful",name:"Who's Thankful For That?",color:"#8e2638",url:"https://thankful-ebon.vercel.app/",mark:`<svg viewBox="0 0 64 64"><path d="M44 8C36 22 26 40 18 58" fill="none" stroke="#e6d6b0" stroke-width="2" stroke-linecap="round"/><g fill="none" stroke="#e6d6b0" stroke-width="1.8"><ellipse cx="44.5" cy="7.5" rx="2.6" ry="5.6" transform="rotate(22 44.5 7.5)"/><ellipse cx="35.3" cy="15" rx="2.6" ry="5.6" transform="rotate(-18 35.3 15)"/><ellipse cx="44.4" cy="17" rx="2.6" ry="5.6" transform="rotate(52 44.4 17)"/><ellipse cx="31.1" cy="23" rx="2.6" ry="5.6" transform="rotate(-18 31.1 23)"/><ellipse cx="40.2" cy="25" rx="2.6" ry="5.6" transform="rotate(52 40.2 25)"/><ellipse cx="27" cy="31" rx="2.6" ry="5.6" transform="rotate(-18 27 31)"/><ellipse cx="36.1" cy="33" rx="2.6" ry="5.6" transform="rotate(52 36.1 33)"/></g></svg>`,
+   tag:"Write what you're thankful for, then guess who wrote each one.",
+   chips:["2+ players","15–25 min","Everyone's phone","TV mode"],
+   steps:["The host picks a prompt, like \"a small, everyday thing.\"","Everyone secretly writes one answer on their phone.","Answers are revealed one at a time. Vote on who wrote it, then hear why it matters to them."],
+   note:"Only one phone? There's a pass-it-around version too."},
+  {id:"gobble",name:"Gobble Minds",color:"#97742f",url:"https://thankful-ebon.vercel.app/gobble/",mark:`<svg viewBox="0 0 64 64"><g stroke="#e6d6b0" stroke-width="1.3" stroke-linejoin="round"><ellipse cx="16.2" cy="35.2" rx="5" ry="11" transform="rotate(-80 16.2 35.2)" fill="none"/><ellipse cx="18.1" cy="30.0" rx="5" ry="11" transform="rotate(-60 18.1 30.0)" fill="none"/><ellipse cx="21.7" cy="25.7" rx="5" ry="11" transform="rotate(-40 21.7 25.7)" fill="none"/><ellipse cx="26.5" cy="23.0" rx="5" ry="11" transform="rotate(-20 26.5 23.0)" fill="none"/><ellipse cx="32.0" cy="22.0" rx="5" ry="11" transform="rotate(0 32.0 22.0)" fill="none"/><ellipse cx="37.5" cy="23.0" rx="5" ry="11" transform="rotate(20 37.5 23.0)" fill="none"/><ellipse cx="42.3" cy="25.7" rx="5" ry="11" transform="rotate(40 42.3 25.7)" fill="none"/><ellipse cx="45.9" cy="30.0" rx="5" ry="11" transform="rotate(60 45.9 30.0)" fill="none"/><ellipse cx="47.8" cy="35.2" rx="5" ry="11" transform="rotate(80 47.8 35.2)" fill="none"/><ellipse cx="32" cy="44" rx="11" ry="12" fill="none"/><circle cx="32" cy="30" r="6" fill="none"/></g><path d="M37 30l4 1.5-4 1.5z" fill="#e6d6b0"/><path d="M36 33c2 2 2 5 0 6-1-2-1-4 0-6z" fill="#e6d6b0"/><circle cx="34" cy="28" r="1.2" fill="#e6d6b0"/><path d="M28 55v6M36 55v6" stroke="#e6d6b0" stroke-width="1.4" stroke-linecap="round"/></svg>`,
+   tag:"Think like the table, or be the Odd Bird nobody matches.",
+   chips:["3+ players","15–30 min","Everyone's phone","TV mode"],
+   steps:["The host picks a mode: match the table, or Odd Bird (be the only one).","Everyone answers the same prompt, like \"Name a pie,\" in secret.","The host merges matching answers, then scores. Watch out for the turkey!"],
+   note:"Odd Bird is best with 5 or more people."},
+];
+const KEY="gamenight-pick";
+let cur=null, active=-1;
+
+function optHTML(g,i){ return `<li class="opt" role="option" id="opt-${g.id}" data-i="${i}" aria-selected="false"><span class="dot" style="background:${g.color}">${g.mark}</span><span class="tx"><b>${g.name}</b><span>${g.tag}</span></span><span class="ck" aria-hidden="true">✓</span></li>`; }
+$("ddList").innerHTML=GAMES.map(optHTML).join("");
+const opts=[...$("ddList").querySelectorAll(".opt")];
+
+function openDD(o){ $("dd").classList.toggle("open",o); $("ddBtn").setAttribute("aria-expanded",String(o)); if(o){ active=Math.max(0,cur?GAMES.indexOf(cur):0); paintActive(); $("ddList").focus(); } }
+function paintActive(){ opts.forEach((el,i)=>el.classList.toggle("act",i===active)); if(active>=0) $("ddList").setAttribute("aria-activedescendant",opts[active].id); }
+$("ddBtn").onclick=()=>openDD(!$("dd").classList.contains("open"));
+opts.forEach(el=>{ el.onclick=()=>{ pick(+el.dataset.i); openDD(false); $("ddBtn").focus(); }; el.onmousemove=()=>{ active=+el.dataset.i; paintActive(); }; });
+$("ddList").addEventListener("keydown",e=>{
+  if(e.key==="ArrowDown"){ e.preventDefault(); active=(active+1)%opts.length; paintActive(); }
+  else if(e.key==="ArrowUp"){ e.preventDefault(); active=(active-1+opts.length)%opts.length; paintActive(); }
+  else if(e.key==="Enter"||e.key===" "){ e.preventDefault(); pick(active); openDD(false); $("ddBtn").focus(); }
+  else if(e.key==="Escape"||e.key==="Tab"){ openDD(false); $("ddBtn").focus(); }
+});
+$("ddBtn").addEventListener("keydown",e=>{ if(e.key==="ArrowDown"||e.key==="ArrowUp"){ e.preventDefault(); openDD(true); } });
+document.addEventListener("click",e=>{ if(!$("dd").contains(e.target)) openDD(false); });
+
+function pick(i){
+  const g=GAMES[i]; if(!g) return; cur=g;
+  try{ localStorage.setItem(KEY,g.id); }catch(e){}
+  try{ history.replaceState(null,"","#"+g.id); }catch(e){}
+  opts.forEach((el,k)=>el.setAttribute("aria-selected",String(k===i)));
+  $("ddDot").style.background=g.color; $("ddDot").style.border="0"; $("ddDot").innerHTML=g.mark;
+  $("ddName").textContent=g.name; $("ddSub").textContent=g.chips[0];
+  const f=$("feat"); f.style.setProperty("--accent",g.color);
+  $("fArt").innerHTML=g.mark; $("fName").textContent=g.name; $("fTag").textContent=g.tag;
+  $("fChips").innerHTML=g.chips.map(c=>`<span>${c}</span>`).join("");
+  $("fSteps").innerHTML=g.steps.map(s=>`<li>${s}</li>`).join("");
+  $("fPlay").href=g.url; $("fPlayName").textContent=g.name.length>16?"Play":`Play ${g.name}`; $("fNote").textContent=g.note;
+  $("empty").classList.add("hidden"); f.classList.add("hidden"); void f.offsetWidth; f.classList.remove("hidden");
+}
+
+// remember the last pick, or follow #chameleon / #thankful / #gobble
+let start=location.hash.slice(1);
+if(!start){ try{ start=localStorage.getItem(KEY)||""; }catch(e){} }
+const si=GAMES.findIndex(g=>g.id===start); if(si>=0) pick(si);
+
 const here="https://link33.vercel.app/thanks";
 $("share").onclick=()=>{
   $("url").textContent=here.replace(/^https?:\/\//,"");
