@@ -88,6 +88,12 @@ h1{margin:0;font-family:var(--serif);font-weight:600;font-variation-settings:"op
 .note{position:relative;z-index:1;text-align:center;font-size:14px;color:var(--muted);margin:12px 0 0}
 
 /* share */
+.party{position:relative;display:flex;align-items:center;gap:14px;text-decoration:none;color:#fbf6ec;background:var(--forest);border-radius:16px;padding:16px 18px;margin:0 0 22px;box-shadow:var(--shadow)}
+.party::after{content:"";position:absolute;inset:6px;border:1px solid rgba(230,214,176,.45);border-radius:11px;pointer-events:none}
+.party svg{width:40px;height:40px;flex:none}
+.party b{display:block;font-family:var(--serif);font-weight:600;font-size:20px;line-height:1.15}
+.party span{font-size:14px;color:var(--gold-soft)}
+.party .go{margin-left:auto;font-size:22px;color:var(--gold-soft)}
 .share{display:block;width:100%;margin-top:22px;border:1px solid var(--line);background:transparent;border-radius:12px;padding:14px 18px;font:500 16px var(--sans);color:var(--ink);cursor:pointer}
 .scrim{position:fixed;inset:0;z-index:10;display:none;align-items:flex-end;justify-content:center;background:rgba(43,36,32,.45);backdrop-filter:blur(2px);padding:16px 16px calc(env(safe-area-inset-bottom) + 16px)}
 .scrim.open{display:flex}
@@ -114,7 +120,13 @@ h1{margin:0;font-family:var(--serif);font-weight:600;font-variation-settings:"op
     <p class="sub">Everyone plays on their own phone.</p>
   </header>
 
-  <span class="lbl" id="ddLbl">Tonight's game</span>
+  <a class="party" href="https://thankful-ebon.vercel.app/party/">
+    <svg viewBox="0 0 40 40" fill="none" stroke="#e6d6b0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="14" cy="14" r="5"/><circle cx="27" cy="14" r="5"/><path d="M5 31c1-5 5-8 9-8s8 3 9 8"/><path d="M20 26c1.5-2 4-3 7-3 4 0 8 3 9 8"/></svg>
+    <span><b>Playing a few games? Start a party</b><span>Everyone joins once, and the host switches games.</span></span>
+    <span class="go" aria-hidden="true">›</span>
+  </a>
+
+  <span class="lbl" id="ddLbl">Or pick one game</span>
   <div class="dd" id="dd">
     <button class="ddBtn" id="ddBtn" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="ddLbl ddBtn">
       <span class="dot" id="ddDot"></span>
@@ -156,7 +168,7 @@ h1{margin:0;font-family:var(--serif);font-weight:600;font-variation-settings:"op
 {
 const $=id=>document.getElementById(id);
 const GAMES=[
-  {id:"chameleon",name:"Chameleon",color:"#2f4a3a",url:"https://chameleon-ten-pi.vercel.app",mark:`<svg viewBox="0 0 120 84"><g stroke="#e6d6b0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M6 74 Q60 66 116 74"/><path d="M44 58 L41 71 M58 59 L60 71 M80 58 L78 70 M94 54 L97 69"/><path d="M40 56 C14 60 8 42 18 34 C28 26 40 36 32 44 C28 48 22 45 24 40"/><path d="M38 50 C40 30 64 20 86 26 C98 29 108 38 110 46 C106 54 96 57 86 57 L46 59 C40 59 37 56 38 50Z"/><path d="M60 24 L64 17 L70 22 L76 16 L80 24"/><circle cx="94" cy="40" r="7"/></g><circle cx="95.5" cy="40" r="2.8" fill="#e6d6b0"/></svg>`,
+  {id:"chameleon",name:"Chameleon",color:"#2f4a3a",url:"https://thankful-ebon.vercel.app/chameleon/",mark:`<svg viewBox="0 0 120 84"><g stroke="#e6d6b0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M6 74 Q60 66 116 74"/><path d="M44 58 L41 71 M58 59 L60 71 M80 58 L78 70 M94 54 L97 69"/><path d="M40 56 C14 60 8 42 18 34 C28 26 40 36 32 44 C28 48 22 45 24 40"/><path d="M38 50 C40 30 64 20 86 26 C98 29 108 38 110 46 C106 54 96 57 86 57 L46 59 C40 59 37 56 38 50Z"/><path d="M60 24 L64 17 L70 22 L76 16 L80 24"/><circle cx="94" cy="40" r="7"/></g><circle cx="95.5" cy="40" r="2.8" fill="#e6d6b0"/></svg>`,
    tag:"Everyone knows the secret word except one bluffer.",
    chips:["3–20 players","10–20 min","Everyone's phone"],
    steps:["One person hosts and reads out a 4-letter code. Everyone joins with it.","Press and hold your card to see the secret word. The chameleon only sees the category.","Go around the circle giving one-word clues, then point at who you think is bluffing."],
